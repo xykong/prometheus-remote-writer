@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "prometheus-remote-writer"
+version = "0.1.0"
+description = "A Python package to send data using Prometheus remote write protocol."
+authors = ["xy.kong <xy.kong@gmail.com>"]
+license = "Apache License 2.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+grpcio-tools = "^1.70.0"
+requests = "^2.32.3"
+python-snappy = "^0.7.3"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
