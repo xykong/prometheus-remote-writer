@@ -5,12 +5,12 @@ all: proto
 
 proto:
 	@echo "Generating Python files from proto..."
-	cd proto && uv run generate-proto.py
+	$(VENV)/python ./proto/generate-proto.py
 
 
 clean:
 	@echo "Cleaning up generated files..."
-	#rm -f prometheus_remote_writer/proto/*.py
+	rm -f prometheus_remote_writer/proto/*.py
 	find . \( -name '*.pyc' -o -name '__pycache__' \) -exec rm -rf {} +
 
 
@@ -24,3 +24,7 @@ lint:
 	$(VENV)/flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics --exclude=$(flake8-exclude)
 	$(VENV)/flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics --exclude=$(flake8-exclude)
 
+
+check: clean proto lint test
+	$(VENV)/tox
+	@echo "\nAll checks passed!"
