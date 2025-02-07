@@ -11,19 +11,26 @@ proto:
 clean:
 	@echo "Cleaning up generated files..."
 	rm -f prometheus_remote_writer/proto/*.py
+	rm -rf .tox
 	find . \( -name '*.pyc' -o -name '__pycache__' \) -exec rm -rf {} +
+	rm -rf dist
 
 
-test:
+test: proto
 	$(VENV)/pytest tests/
 
 
-lint:
+lint: proto
 	@echo "Running linter..."
 	$(VENV)/flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 	$(VENV)/flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
 
-check: clean proto lint test
+check: clean lint test
 	$(VENV)/tox
 	@echo "\nAll checks passed!"
+
+
+publish: check
+	@echo "Publishing to PyPI..."
+	poetry publish --build
