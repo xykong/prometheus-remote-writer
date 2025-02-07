@@ -18,6 +18,14 @@ pytest = "^8.3.4"
 tox = "^4.24.1"
 flake8 = "^7.1.1"
 
+
+[tool.versions]
+branch = "master"
+commit = "e05b144"
+commit_count = 21
+is_dirty = true
+datetime = "2025-02-07 20:25:32"
+version = "0.0.2"
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"

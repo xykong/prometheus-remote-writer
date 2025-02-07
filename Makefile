@@ -34,3 +34,12 @@ check: clean lint test
 publish: check
 	@echo "Publishing to PyPI..."
 	poetry publish --build
+
+
+version = $(shell poetry version | cut -d' ' -f2 | head -n1)
+release:
+	@echo "Creating a new release..."
+	git flow release start $(version)
+	git flow release finish -m "publish"
+	git push --all
+	git push --tags
