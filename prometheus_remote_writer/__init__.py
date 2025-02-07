@@ -3,8 +3,8 @@ from typing import Dict, List, Optional
 import requests
 import snappy  # noqa
 
-from .remote_pb2 import WriteRequest  # noqa
-from .types_pb2 import TimeSeries, Label, Sample  # noqa
+from prometheus_remote_writer.proto.remote_pb2 import WriteRequest  # noqa
+from prometheus_remote_writer.proto.types_pb2 import TimeSeries, Label, Sample  # noqa
 
 
 # noinspection PyUnresolvedReferences, HttpUrlsUsage

@@ -3,7 +3,7 @@ from unittest.mock import patch
 import pytest
 import requests
 
-from prometheus_remote_writer import RemoteWriter  # replace `your_module` with the actual module name
+from prometheus_remote_writer import RemoteWriter
 
 # Sample data for testing
 metrics = [

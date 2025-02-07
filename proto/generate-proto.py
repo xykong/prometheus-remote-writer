@@ -9,7 +9,7 @@ def main():
     # 调用 protoc 命令生成 Python 文件
     grpc_tools.protoc.main((
         '',
-        f'-I.',  # 指定 proto 文件的根目录
+        '-I.',  # 指定 proto 文件的根目录
         f'--python_out={output_dir}',  # 指定生成的 Python 文件的输出目录
         *proto_files,  # 需要编译的 proto 文件
     ))
