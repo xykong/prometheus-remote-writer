@@ -68,6 +68,26 @@ jobs:
           draft: false  # Indicates the release should not be a draft
           prerelease: false  # Indicates the release should not be marked as a prerelease
 
+      - name: Upload Release Assets
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/prometheus_remote_writer-*.whl
+          asset_name: prometheus_remote_writer-${{ github.ref_name }}.whl
+          asset_content_type: application/zip
+
+      - name: Upload Source Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/prometheus_remote_writer-*.tar.gz
+          asset_name: prometheus_remote_writer-${{ github.ref_name }}.tar.gz
+          asset_content_type: application/gzip
+
       # Step 8: Publish release distributions to PyPI
       # - This step uploads the built distributions to PyPI using the 'pypa/gh-action-pypi-publish' action.
       # - PYPI_TOKEN is a secret that you must add to your GitHub repository settings.
