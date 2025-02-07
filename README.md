@@ -1,6 +1,6 @@
 # Prometheus Remote Writer
 
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+[![Python package](https://github.com/xykong/prometheus-remote-writer/actions/workflows/python-package.yml/badge.svg)](https://github.com/xykong/prometheus-remote-writer/actions/workflows/python-package.yml)
 ![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
 
 ## Introduction
