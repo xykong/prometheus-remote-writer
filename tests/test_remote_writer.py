@@ -1,3 +1,4 @@
+import socket
 import time
 from unittest.mock import patch
 
@@ -9,12 +10,27 @@ from prometheus_remote_writer import RemoteWriter
 VM_API_URL = 'http://localhost:58480/insert/0/prometheus/'
 
 
+def is_vm_available(host, port):
+    """Check if the VM service is available on the host."""
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(1)
+        try:
+            sock.connect((host, port))
+            return True
+        except (socket.timeout, ConnectionRefusedError):
+            return False
+
+
 @pytest.fixture
 def mock_requests_post():
     with patch('requests.post') as mock_post:
         yield mock_post
 
 
+@pytest.mark.skipif(
+    not is_vm_available('localhost', 58480),
+    reason="VM service is unavailable or not configured."
+)
 def test_remote_writer_to_server():
     # Setup
     server_url = "http://localhost:58480/insert/0/prometheus/api/v1/write"
@@ -39,6 +55,10 @@ def test_remote_writer_to_server():
         pytest.fail(f"Failed to send data to server: {e}")
 
 
+@pytest.mark.skipif(
+    not is_vm_available('localhost', 58480),
+    reason="VM service is unavailable or not configured."
+)
 def test_remote_writer_send_successful(mock_requests_post):
     # Arrange
     mock_requests_post.return_value.status_code = 200
@@ -91,6 +111,10 @@ def test_remote_writer_send_failure(mock_requests_post):
         writer.send(data)
 
 
+@pytest.mark.skipif(
+    not is_vm_available('localhost', 58480),
+    reason="VM service is unavailable or not configured."
+)
 def test_remote_writer_no_data(mock_requests_post):
     # Arrange
     writer = RemoteWriter(
