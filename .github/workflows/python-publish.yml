@@ -1,70 +1,78 @@
-# This workflow will upload a Python Package to PyPI when a release is created
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python#publishing-to-package-registries
+name: Release and Publish Python Package
 
-# This workflow uses actions that are not certified by GitHub.
-# They are provided by a third-party and are governed by
-# separate terms of service, privacy policy, and support
-# documentation.
-
-name: Upload Python Package
-
+# Trigger the workflow on any push event that includes tags matching 'v*',
+# which typically represents version tags (e.g., v1.0.0).
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 permissions:
   contents: read
 
 jobs:
-  release-build:
+  release-publish:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Check out the code from the repository
+      # - This action checks out the repository code so that it can be accessed by the workflow.
       - uses: actions/checkout@v4
 
+      # Step 2: Set up Python environment
+      # - This action sets up a specified version of Python, in this case, Python 3.x.
       - uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
+      # Step 3: Install Poetry
+      # - Poetry is a dependency management tool for Python. This step installs Poetry
+      #   by fetching and running its official installation script.
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python3 -
+          export PATH="$HOME/.local/bin:$PATH"          
+
+      # Step 4: Configure Poetry
+      # - This configures Poetry to create virtual environments within the project directory.
+      - name: Configure Poetry
+        run: |
+          poetry config virtualenvs.in-project true          
+
+      # Step 5: Install dependencies
+      # - Installs the project's dependencies as specified in the pyproject.toml file.
+      # - The '--no-root' option ensures that the package itself is not installed,
+      #   only the dependencies are.
+      - name: Install dependencies
+        run: |
+          poetry install --no-root          
+
+      # Step 6: Build release distributions
+      # - This uses Poetry to build the source and wheel distributions of the package,
+      #   which are saved in the 'dist/' directory.
       - name: Build release distributions
         run: |
-          # NOTE: put your own distribution build steps here.
-          python -m pip install build
-          python -m build
+          poetry build          
 
-      - name: Upload distributions
-        uses: actions/upload-artifact@v4
+      # Step 7: Create GitHub Release
+      # - This step creates a new GitHub release based on the tag that triggered the workflow.
+      # - It uses the 'actions/create-release' action to automate this process.
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
         with:
-          name: release-dists
-          path: dist/
+          tag_name: ${{ github.ref_name }}  # Uses the tag that triggered the workflow
+          release_name: "Release ${{ github.ref_name }}"  # Names the release after the tag
+          draft: false  # Indicates the release should not be a draft
+          prerelease: false  # Indicates the release should not be marked as a prerelease
 
-  pypi-publish:
-    runs-on: ubuntu-latest
-    needs:
-      - release-build
-    permissions:
-      # IMPORTANT: this permission is mandatory for trusted publishing
-      id-token: write
-
-    # Dedicated environments with protections for publishing are strongly recommended.
-    # For more information, see: https://docs.github.com/en/actions/deployment/targeting-different-environments/using-environments-for-deployment#deployment-protection-rules
-    environment:
-      name: pypi
-      # OPTIONAL: uncomment and update to include your PyPI project URL in the deployment status:
-      # url: https://pypi.org/p/YOURPROJECT
-      #
-      # ALTERNATIVE: if your GitHub Release name is the PyPI project version string
-      # ALTERNATIVE: exactly, uncomment the following line instead:
-      # url: https://pypi.org/project/YOURPROJECT/${{ github.event.release.name }}
-
-    steps:
-      - name: Retrieve release distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: release-dists
-          path: dist/
-
+      # Step 8: Publish release distributions to PyPI
+      # - This step uploads the built distributions to PyPI using the 'pypa/gh-action-pypi-publish' action.
+      # - PYPI_TOKEN is a secret that you must add to your GitHub repository settings.
       - name: Publish release distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          packages-dir: dist/
+          packages-dir: dist/  # The directory containing the built distributions
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}  # Secret token for authenticating with PyPI
