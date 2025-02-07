@@ -9,6 +9,7 @@ on:
 
 permissions:
   contents: write  # Allows writing to the repository's contents, such as creating releases
+  id-token: write  # Allows requesting OIDC tokens
 
 jobs:
   release-publish:
@@ -74,5 +75,3 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           packages-dir: dist/  # The directory containing the built distributions
-        env:
-          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}  # Secret token for authenticating with PyPI
