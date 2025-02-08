@@ -36,7 +36,7 @@ publish: check
 	poetry publish --build
 
 
-version = $(shell poetry version | cut -d' ' -f2 | head -n1)
+version = $(shell poetry version -s)
 release:
 	@echo "Creating a new release..."
 	git flow release start $(version)
