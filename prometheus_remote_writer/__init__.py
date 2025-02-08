@@ -97,6 +97,8 @@ class RemoteWriter:
                 proxies=self.proxies
             )
 
+            # print('url', response.url, 'response:', response)
+
             response.raise_for_status()
 
         except requests.exceptions.RequestException as e:
