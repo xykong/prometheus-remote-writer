@@ -36,10 +36,12 @@ publish: check
 	poetry publish --build
 
 
-version = $(shell poetry version -s)
+bump = patch
+next-version = $(shell poetry version $(bump) -s --dry-run)
 release:
 	@echo "Creating a new release..."
-	git flow release start $(version)
+	git flow release start $(next-version)
+	poetry version $(bump)
 	git flow release finish -m "publish"
 	git push --all
 	git push --tags
