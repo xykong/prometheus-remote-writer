@@ -1,3 +1,4 @@
+import warnings
 from typing import Dict, List, Optional
 
 import requests
@@ -7,7 +8,7 @@ from prometheus_remote_writer.proto.remote_pb2 import WriteRequest  # noqa
 from prometheus_remote_writer.proto.types_pb2 import TimeSeries, Label, Sample  # noqa
 
 
-# noinspection PyUnresolvedReferences, HttpUrlsUsage
+# noinspection HttpUrlsUsage
 class RemoteWriter:
     def __init__(
             self,
@@ -34,13 +35,13 @@ class RemoteWriter:
         self.auth = self._setup_auth(auth)
         self.proxies = proxies
 
-    def _setup_auth(self, auth: Optional[Dict[str, str]]) -> Optional[requests.auth.AuthBase]:
+    def _setup_auth(self, auth: Optional[Dict[str, str]]) -> Optional[requests.auth.AuthBase]:  # noqa
 
         if not auth:
             return None
 
         if 'username' in auth and 'password' in auth:
-            return requests.auth.HTTPBasicAuth(auth['username'], auth['password'])
+            return requests.auth.HTTPBasicAuth(auth['username'], auth['password'])  # noqa
 
         if 'bearer_token' in auth:
             self.headers["Authorization"] = f"Bearer {auth['bearer_token']}"
@@ -68,10 +69,21 @@ class RemoteWriter:
 
         for item in metrics:
             ts = TimeSeries()
+
             for key, value in item['metric'].items():
                 ts.labels.append(Label(name=key, value=value))
+
             for value, timestamp in zip(item['values'], item['timestamps']):
+
+                # Check if timestamp is in milliseconds
+                if timestamp < 1e10:
+                    warnings.warn(
+                        f"Timestamp {timestamp} appears to be in seconds. "
+                        "Timestamps should be in milliseconds."
+                    )
+
                 ts.samples.append(Sample(value=value, timestamp=timestamp))
+
             timeseries.append(ts)
 
         return timeseries
