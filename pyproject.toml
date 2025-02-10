@@ -35,7 +35,8 @@ version = "0.0.2"
 [tool.versions.settings]
 allow_dirty = false
 commit = true
-commit_on = ["major", "minor", "patch"]
+commit_on_argument = ["major", "minor", "patch"]
+commit_on_branches = ["release/.*"]
 commit_message = "Bump version: {current_version} → {new_version}"
 
 
