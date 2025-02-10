@@ -59,6 +59,7 @@ jobs:
       # - This step creates a new GitHub release based on the tag that triggered the workflow.
       # - It uses the 'actions/create-release' action to automate this process.
       - name: Create GitHub Release
+        id: create_release  # 添加这个 ID 以便在后续步骤中引用输出
         uses: actions/create-release@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # GitHub automatically provides this token
@@ -67,6 +68,11 @@ jobs:
           release_name: "Release ${{ github.ref_name }}"  # Names the release after the tag
           draft: false  # Indicates the release should not be a draft
           prerelease: false  # Indicates the release should not be marked as a prerelease
+
+      - name: Debug Create Release
+        run: |
+          export
+          echo "Upload URL: ${{ steps.create_release.outputs.upload_url }}"
 
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1

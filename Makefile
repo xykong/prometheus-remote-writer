@@ -10,10 +10,13 @@ proto:
 
 clean:
 	@echo "Cleaning up generated files..."
-	rm -f prometheus_remote_writer/proto/*.py
 	rm -rf .tox
-	find . \( -name '*.pyc' -o -name '__pycache__' \) -exec rm -rf {} +
+	rm -rf .pytest_cache
+	rm -rf .poetry
+	rm -rf .venv
 	rm -rf dist
+	-rm .DS_Store
+	find . \( -name '*.pyc' -o -name '__pycache__' \) -exec rm -rf {} +
 
 
 test: proto
