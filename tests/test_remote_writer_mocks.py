@@ -10,12 +10,12 @@ metrics = [
     {
         'metric': {'__name__': 'metric_name', 'label1': 'value1'},
         'values': [100, 200],
-        'timestamps': [1617181723, 1617181733]
+        'timestamps': [1617181723000, 1617181733000]
     }
 ]
 
 
-# noinspection HttpUrlsUsage,PyUnresolvedReferences
+# noinspection HttpUrlsUsage
 class TestRemoteWriter:
 
     def test_initialization_defaults(self):
@@ -35,13 +35,13 @@ class TestRemoteWriter:
         assert writer.url == "http://example.com"
         assert writer.headers["Custom-Header"] == "HeaderValue"
         assert writer.timeout == 20
-        assert isinstance(writer.auth, requests.auth.HTTPBasicAuth)
+        assert isinstance(writer.auth, requests.auth.HTTPBasicAuth)  # noqa
         assert writer.proxies == {'http': 'http://proxy.com'}
 
     def test_setup_auth_basic(self):
         auth = {'username': 'user', 'password': 'pass'}
         writer = RemoteWriter(url="http://example.com", auth=auth)
-        assert isinstance(writer.auth, requests.auth.HTTPBasicAuth)
+        assert isinstance(writer.auth, requests.auth.HTTPBasicAuth)  # noqa
 
     def test_setup_auth_bearer_token(self):
         auth = {'bearer_token': 'token'}
@@ -58,7 +58,7 @@ class TestRemoteWriter:
         assert ts.labels[0].value == 'metric_name'
         assert len(ts.samples) == 2
         assert ts.samples[0].value == 100
-        assert ts.samples[0].timestamp == 1617181723
+        assert ts.samples[0].timestamp == 1617181723000
 
     def test_build_message(self):
         timeseries = RemoteWriter._convert_to_timeseries(metrics)
