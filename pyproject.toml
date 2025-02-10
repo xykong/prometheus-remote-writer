@@ -20,15 +20,15 @@ flake8 = "^7.1.1"
 
 
 [tool.poetry.requires-plugins]
-poetry-versions-plugin = ">=0.8.2"
+poetry-versions-plugin = ">=0.9.0"
 
 
 [tool.versions]
-branch = "master"
-commit = "0f06deb"
-commit_count = 22
-is_dirty = true
-datetime = "2025-02-07 20:28:29"
+branch = "release/0.0.3"
+commit = "75c150f"
+commit_count = 30
+is_dirty = false
+datetime = "2025-02-10 11:43:20"
 version = "0.0.2"
 
 
