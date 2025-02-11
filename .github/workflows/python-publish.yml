@@ -73,7 +73,14 @@ jobs:
         run: |
           export
           echo "Upload URL: ${{ steps.create_release.outputs.upload_url }}"
-          find .
+          ls -la ./dist
+          pwd
+
+      - name: List dist directory
+        run: |
+          ls -la ./dist
+          pwd
+          ls dist/prometheus_remote_writer-*.whl
 
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
@@ -81,7 +88,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/prometheus-remote-writer/prometheus-remote-writer/dist/prometheus_remote_writer-*.whl
+          asset_path: ${{env.GITHUB_WORKSPACE}}/dist/prometheus_remote_writer-*.whl
           asset_name: prometheus_remote_writer-${{ github.ref_name }}.whl
           asset_content_type: application/zip
 
