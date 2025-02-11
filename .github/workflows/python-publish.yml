@@ -69,10 +69,11 @@ jobs:
           draft: false  # Indicates the release should not be a draft
           prerelease: false  # Indicates the release should not be marked as a prerelease
 
-#      - name: Debug Create Release
-#        run: |
-#          export
-#          echo "Upload URL: ${{ steps.create_release.outputs.upload_url }}"
+      - name: Debug Create Release
+        run: |
+          export
+          echo "Upload URL: ${{ steps.create_release.outputs.upload_url }}"
+          find .
 
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
