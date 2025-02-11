@@ -53,7 +53,9 @@ jobs:
       #   which are saved in the 'dist/' directory.
       - name: Build release distributions
         run: |
-          poetry build          
+          poetry build
+          echo "WHEEL_PATH=$(find $GITHUB_WORKSPACE/dist -name '*.whl')" >> $GITHUB_ENV
+          echo "TAR_PATH=$(find $GITHUB_WORKSPACE/dist -name '*.tar.gz')" >> $GITHUB_ENV
 
       # Step 7: Create GitHub Release
       # - This step creates a new GitHub release based on the tag that triggered the workflow.
@@ -76,18 +78,13 @@ jobs:
           ls -la ./dist
           pwd
 
-      - name: Rename wheel file
-        run: |
-          mv dist/prometheus_remote_writer-*.whl dist/prometheus_remote_writer-${{ github.ref_name }}.whl
-          mv dist/prometheus_remote_writer-*.tar.gz dist/prometheus_remote_writer-${{ github.ref_name }}.tar.gz
-
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/prometheus_remote_writer-${{ github.ref_name }}.whl
+          asset_path: ${{ env.WHEEL_PATH }}
           asset_name: prometheus_remote_writer-${{ github.ref_name }}.whl
           asset_content_type: application/zip
 
@@ -97,7 +94,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/prometheus_remote_writer-${{ github.ref_name }}.tar.gz
+          asset_path: ${{ env.TAR_PATH }}
           asset_name: prometheus_remote_writer-${{ github.ref_name }}.tar.gz
           asset_content_type: application/gzip
 
