@@ -76,11 +76,10 @@ jobs:
           ls -la ./dist
           pwd
 
-      - name: List dist directory
+      - name: Rename wheel file
         run: |
-          ls -la ./dist
-          pwd
-          ls dist/prometheus_remote_writer-*.whl
+          mv dist/prometheus_remote_writer-*.whl dist/prometheus_remote_writer-${{ github.ref_name }}.whl
+          mv dist/prometheus_remote_writer-*.tar.gz dist/prometheus_remote_writer-${{ github.ref_name }}.tar.gz
 
       - name: Upload Release Assets
         uses: actions/upload-release-asset@v1
@@ -88,7 +87,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/prometheus_remote_writer-0.0.10-py3-none-any.whl
+          asset_path: dist/prometheus_remote_writer-${{ github.ref_name }}.whl
           asset_name: prometheus_remote_writer-${{ github.ref_name }}.whl
           asset_content_type: application/zip
 
@@ -98,7 +97,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: /home/runner/work/prometheus-remote-writer/prometheus-remote-writer/dist/prometheus_remote_writer-*.tar.gz
+          asset_path: dist/prometheus_remote_writer-${{ github.ref_name }}.tar.gz
           asset_name: prometheus_remote_writer-${{ github.ref_name }}.tar.gz
           asset_content_type: application/gzip
 
