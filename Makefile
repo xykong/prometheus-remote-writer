@@ -45,6 +45,6 @@ release:
 	@echo "Creating a new release..."
 	git flow release start $(next-version)
 	poetry version $(bump)
-	git flow release finish -m "publish"
+	GIT_MERGE_AUTOEDIT=no git flow release finish -m "publish"
 	git push --all
 	git push --tags
