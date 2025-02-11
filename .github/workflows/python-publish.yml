@@ -88,7 +88,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ${{env.GITHUB_WORKSPACE}}/dist/prometheus_remote_writer-*.whl
+          asset_path: dist/prometheus_remote_writer-0.0.10-py3-none-any.whl
           asset_name: prometheus_remote_writer-${{ github.ref_name }}.whl
           asset_content_type: application/zip
 
