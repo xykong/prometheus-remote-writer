@@ -1,15 +1,15 @@
 [tool.poetry]
 name = "prometheus-remote-writer"
-version = "0.0.12"
+version = "0.1.1"
 description = "A Python package to send data using Prometheus remote write protocol."
 authors = ["xy.kong <xy.kong@gmail.com>"]
 license = "Apache License 2.0"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = ">=3.8.1 <4"
-grpcio-tools = "^1.70.0"
-requests = "^2.32.3"
+python = ">=3.9,<4"
+grpcio-tools = "^1.74.0"
+requests = "^2.32.5"
 python-snappy = "^0.7.3"
 
 
@@ -24,12 +24,12 @@ poetry-versions-plugin = ">=0.10.1"
 
 
 [tool.versions]
-branch = "release/0.0.12"
-commit = "eb6b482"
-commit_count = 82
+branch = "release/0.1.1"
+commit = "30faeb8"
+commit_count = 87
 is_dirty = false
-datetime = "2025-02-11 15:14:41"
-version = "0.0.12"
+datetime = "2025-08-26 11:26:20"
+version = "0.1.1"
 
 
 [tool.versions.settings]
