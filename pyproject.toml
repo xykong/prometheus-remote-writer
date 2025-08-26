@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "prometheus-remote-writer"
-version = "0.1.1"
+version = "0.1.2"
 description = "A Python package to send data using Prometheus remote write protocol."
 authors = ["xy.kong <xy.kong@gmail.com>"]
 license = "Apache License 2.0"
@@ -24,12 +24,12 @@ poetry-versions-plugin = ">=0.10.1"
 
 
 [tool.versions]
-branch = "release/0.1.1"
-commit = "30faeb8"
-commit_count = 87
+branch = "release/0.1.2"
+commit = "1c50154"
+commit_count = 91
 is_dirty = false
-datetime = "2025-08-26 11:26:20"
-version = "0.1.1"
+datetime = "2025-08-26 11:34:34"
+version = "0.1.2"
 
 
 [tool.versions.settings]

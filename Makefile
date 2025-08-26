@@ -13,7 +13,6 @@ clean:
 	rm -rf .tox
 	rm -rf .pytest_cache
 	rm -rf .poetry
-	rm -rf .venv
 	rm -rf dist
 	-rm .DS_Store
 	find . \( -name '*.pyc' -o -name '__pycache__' \) -exec rm -rf {} +
