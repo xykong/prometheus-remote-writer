@@ -54,9 +54,74 @@ writer.send(data)
 ## Configuration
 
 `RemoteWriter` supports the following configuration parameters:
-`url` (required): The URL of the Prometheus remote write endpoint.
-`headers` (optional): Custom HTTP headers for authentication or other purposes.
-`timeout` (optional): Request timeout in seconds, default is 10 seconds.
+
+- `url` (required): The URL of the Prometheus remote write endpoint.
+- `headers` (optional): Custom HTTP headers for authentication or other purposes.
+- `timeout` (optional): Request timeout in seconds, default is 10 seconds.
+- `auth` (optional): Authentication credentials. Supports:
+  - Basic auth: `{'username': 'user', 'password': 'pass'}`
+  - Bearer token: `{'bearer_token': 'your-token'}`
+- `verify` (optional): SSL certificate verification. Options:
+  - `True` (default): Verify SSL certificates
+  - `False`: Disable SSL certificate verification (useful for self-signed certificates)
+  - `'/path/to/ca-bundle.crt'`: Path to a custom CA certificate bundle
+- `proxies` (optional): Proxy configuration as a dictionary, e.g., `{'http': 'http://proxy.com', 'https': 'https://proxy.com'}`
+- `retries` (optional): Number of retry attempts for failed requests, default is 3.
+- `max_series_per_request` (optional): Maximum number of time series per request, default is 2000.
+- `auto_convert_seconds_to_ms` (optional): Automatically convert timestamps from seconds to milliseconds, default is True.
+
+### Advanced Examples
+
+#### Using Self-Signed Certificates
+
+If your Prometheus server uses a self-signed certificate, you can disable SSL verification:
+
+```python
+from prometheus_remote_writer import RemoteWriter
+
+writer = RemoteWriter(
+    url='https://mimir.example.com/api/v1/push',
+    headers={'X-Scope-OrgID': 'test-id'},
+    verify=False  # Disable SSL verification
+)
+```
+
+#### Using Custom CA Certificate
+
+Alternatively, you can provide a path to your custom CA certificate:
+
+```python
+writer = RemoteWriter(
+    url='https://mimir.example.com/api/v1/push',
+    headers={'X-Scope-OrgID': 'test-id'},
+    verify='/path/to/ca-bundle.crt'  # Custom CA certificate
+)
+```
+
+#### Using Authentication
+
+```python
+# Bearer token authentication
+writer = RemoteWriter(
+    url='https://your-prometheus-server/api/v1/write',
+    auth={'bearer_token': 'YOUR_ACCESS_TOKEN'}
+)
+
+# Basic authentication
+writer = RemoteWriter(
+    url='https://your-prometheus-server/api/v1/write',
+    auth={'username': 'user', 'password': 'pass'}
+)
+```
+
+#### Using Proxy
+
+```python
+writer = RemoteWriter(
+    url='https://your-prometheus-server/api/v1/write',
+    proxies={'http': 'http://proxy.example.com:8080', 'https': 'https://proxy.example.com:8080'}
+)
+```
 
 ## Unit Testing
 
