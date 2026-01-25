@@ -5,19 +5,21 @@ This guide is for agentic coding assistants working on the `prometheus-remote-wr
 ## Project Overview
 
 Python library for writing time-series data using the Prometheus Remote Write protocol. Supports Python 3.9+.
-Uses Poetry for dependency management, pytest for testing, and flake8 for linting.
+Uses uv for dependency management, pytest for testing, and flake8 for linting.
 
 ## Build/Test/Lint Commands
 
 ### Setup
 ```bash
-# Install dependencies (Poetry must be installed)
-poetry install
+# Install uv (if not already installed)
+curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Activate virtual environment
-poetry shell
+# Install dependencies
+uv pip install -e ".[dev]"
+
 # OR use the local venv
 source .venv/bin/activate
+uv pip install -e ".[dev]"
 ```
 
 ### Running Tests
@@ -25,28 +27,28 @@ source .venv/bin/activate
 # Run all tests
 make test
 # OR
-poetry run pytest
+pytest
 
 # Run specific test file
-poetry run pytest tests/test_remote_writer_mocks.py
+pytest tests/test_remote_writer_mocks.py
 
 # Run single test function
-poetry run pytest tests/test_remote_writer_mocks.py::TestRemoteWriter::test_initialization_defaults
+pytest tests/test_remote_writer_mocks.py::TestRemoteWriter::test_initialization_defaults
 
 # Run with verbose output
-poetry run pytest -v
+pytest -v
 
 # Run with coverage
-poetry run pytest --cov=prometheus_remote_writer
+pytest --cov=prometheus_remote_writer
 ```
 
 ### Linting
 ```bash
 # Run flake8 (critical errors only)
-poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
 
 # Run full flake8 (with warnings)
-poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
 # OR use Makefile
 make lint
@@ -55,7 +57,7 @@ make lint
 ### Building
 ```bash
 # Build package
-poetry build
+python -m build
 
 # Run all checks (clean, lint, test, tox)
 make check
@@ -267,7 +269,7 @@ def __exit__(self, exc_type, exc, tb):
 - ❌ Commit without running tests and linter
 - ❌ Use `print()` for debugging (use `logging` module)
 - ❌ Exceed 127 character line length
-- ❌ Add dependencies without updating `pyproject.toml` via Poetry
+- ❌ Add dependencies without updating `pyproject.toml`
 
 ## Version Control
 

@@ -32,23 +32,20 @@ jobs:
           export
           python --version
 
-      - name: Install Poetry
+      - name: Install uv
         run: |
-          curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 -
-          export PATH="$HOME/.local/bin:$PATH"
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Install dependencies
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          poetry install        
+          uv pip install --system -e ".[dev]"
 
       - name: Lint with flake8
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          poetry run flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-          poetry run flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Test with pytest
         run: |
-          export PATH="$HOME/.local/bin:$PATH"
-          poetry run pytest        
+          pytest        

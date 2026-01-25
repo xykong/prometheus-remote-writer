@@ -1,43 +1,23 @@
-[tool.poetry]
+[project]
 name = "prometheus-remote-writer"
 version = "1.1.3"
 description = "A Python package to send data using Prometheus remote write protocol."
-authors = ["xy.kong <xy.kong@gmail.com>"]
-license = "Apache License 2.0"
+authors = [{name = "xy.kong", email = "xy.kong@gmail.com"}]
+license = {text = "Apache License 2.0"}
 readme = "README.md"
+requires-python = ">=3.9,<4"
+dependencies = [
+    "grpcio-tools>=1.74.0",
+    "requests>=2.32.5",
+    "python-snappy>=0.7.3",
+]
 
-[tool.poetry.dependencies]
-python = ">=3.9,<4"
-grpcio-tools = "^1.74.0"
-requests = "^2.32.5"
-python-snappy = "^0.7.3"
-
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.4"
-tox = "^4.24.1"
-flake8 = "^7.1.1"
-
-
-[tool.poetry.requires-plugins]
-poetry-versions-plugin = ">=0.10.1"
-
-
-[tool.versions]
-branch = "master"
-commit = "1c50154"
-commit_count = 91
-is_dirty = false
-datetime = "2026-01-26 01:13:21"
-version = "1.1.3"
-
-
-[tool.versions.settings]
-allow_dirty = false
-commit = true
-commit_on_argument = ["major", "minor", "patch"]
-commit_on_branches = ["release/.*"]
-commit_message = "Bump version: {current_version} → {new_version}"
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.4",
+    "tox>=4.24.1",
+    "flake8>=7.1.1",
+]
 
 
 [build-system]

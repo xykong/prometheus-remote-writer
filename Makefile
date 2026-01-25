@@ -12,7 +12,6 @@ clean:
 	@echo "Cleaning up generated files..."
 	rm -rf .tox
 	rm -rf .pytest_cache
-	rm -rf .poetry
 	rm -rf dist
 	-rm .DS_Store
 	find . \( -name '*.pyc' -o -name '__pycache__' \) -exec rm -rf {} +
@@ -35,15 +34,5 @@ check: clean lint test
 
 publish: check
 	@echo "Publishing to PyPI..."
-	poetry publish --build
-
-
-bump = patch
-next-version = $(shell poetry version $(bump) -s --dry-run)
-release:
-	@echo "Creating a new release..."
-	git flow release start $(next-version)
-	poetry version $(bump)
-	GIT_MERGE_AUTOEDIT=no git flow release finish -m "publish"
-	git push --all
-	git push --tags
+	python -m build
+	twine upload dist/*

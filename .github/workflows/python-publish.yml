@@ -26,34 +26,26 @@ jobs:
         with:
           python-version: "3.x"
 
-      # Step 3: Install Poetry
-      # - Poetry is a dependency management tool for Python. This step installs Poetry
+      # Step 3: Install uv
+      # - uv is a fast Python package installer. This step installs uv
       #   by fetching and running its official installation script.
-      - name: Install Poetry
+      - name: Install uv
         run: |
-          curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.8.3 python3 -
-          export PATH="$HOME/.local/bin:$PATH"          
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
 
-      # Step 4: Configure Poetry
-      # - This configures Poetry to create virtual environments within the project directory.
-      - name: Configure Poetry
-        run: |
-          poetry config virtualenvs.in-project true          
-
-      # Step 5: Install dependencies
+      # Step 4: Install dependencies
       # - Installs the project's dependencies as specified in the pyproject.toml file.
-      # - The '--no-root' option ensures that the package itself is not installed,
-      #   only the dependencies are.
       - name: Install dependencies
         run: |
-          poetry install --no-root          
+          uv pip install --system build
 
-      # Step 6: Build release distributions
-      # - This uses Poetry to build the source and wheel distributions of the package,
+      # Step 5: Build release distributions
+      # - This uses Python build to build the source and wheel distributions of the package,
       #   which are saved in the 'dist/' directory.
       - name: Build release distributions
         run: |
-          poetry build
+          python -m build
           echo "WHEEL_PATH=$(find $GITHUB_WORKSPACE/dist -name '*.whl')" >> $GITHUB_ENV
           echo "TAR_PATH=$(find $GITHUB_WORKSPACE/dist -name '*.tar.gz')" >> $GITHUB_ENV
 
